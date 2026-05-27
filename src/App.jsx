@@ -92,6 +92,13 @@ function App() {
     }
   }
 
+  function handleDisconnectWallet() {
+    setWallet({
+      ...initialWalletState,
+      message: "Wallet disconnected in this app."
+    });
+  }
+
   useEffect(() => {
     const ethereum = getInstalledWallet();
     if (!ethereum) return undefined;
@@ -125,6 +132,7 @@ function App() {
         hasMetaMask={hasMetaMask}
         isSepolia={isSepolia}
         onConnectWallet={handleConnectWallet}
+        onDisconnectWallet={handleDisconnectWallet}
         onSwitchNetwork={handleSwitchNetwork}
       />
 

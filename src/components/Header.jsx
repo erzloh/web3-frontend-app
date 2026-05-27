@@ -5,6 +5,7 @@ function Header({
   hasMetaMask,
   isSepolia,
   onConnectWallet,
+  onDisconnectWallet,
   onSwitchNetwork
 }) {
   return (
@@ -37,6 +38,12 @@ function Header({
               ? "Connecting..."
               : "Connect Wallet"}
         </button>
+
+        {wallet.address && (
+          <button className="secondary-button" onClick={onDisconnectWallet}>
+            Disconnect
+          </button>
+        )}
       </div>
     </header>
   );
