@@ -11,6 +11,10 @@ import {
   getInstalledWallet,
   switchToSepolia
 } from "./services/wallet.js";
+import {
+  getErc42DashboardData,
+  isTokenContractConfigured
+} from "./services/token.js";
 
 const initialWalletState = {
   address: "",
@@ -20,10 +24,51 @@ const initialWalletState = {
   message: ""
 };
 
+const initialTokenState = {
+  data: null,
+  isLoading: false,
+  message: isTokenContractConfigured()
+    ? ""
+    : "ERC42 contract address is not configured yet."
+};
+
 function App() {
   const [wallet, setWallet] = useState(initialWalletState);
+  const [token, setToken] = useState(initialTokenState);
   const hasMetaMask = useMemo(() => Boolean(getInstalledWallet()), []);
   const isSepolia = wallet.chainId === SEPOLIA_CHAIN_ID;
+
+  const loadTokenDashboard = useCallback(async (address, chainId) => {
+    if (!address || chainId !== SEPOLIA_CHAIN_ID) {
+      setToken((current) => ({
+        ...current,
+        data: null,
+        isLoading: false
+      }));
+      return;
+    }
+
+    setToken((current) => ({
+      ...current,
+      isLoading: true,
+      message: ""
+    }));
+
+    try {
+      const data = await getErc42DashboardData(address);
+      setToken({
+        data,
+        isLoading: false,
+        message: ""
+      });
+    } catch (error) {
+      setToken({
+        data: null,
+        isLoading: false,
+        message: error.message
+      });
+    }
+  }, []);
 
   const refreshWallet = useCallback(
     async (address = wallet.address) => {
@@ -40,8 +85,9 @@ function App() {
         chainId: network.chainId,
         ethBalance: balance
       }));
+      await loadTokenDashboard(address, network.chainId);
     },
-    [wallet.address]
+    [loadTokenDashboard, wallet.address]
   );
 
   async function handleConnectWallet() {
@@ -63,6 +109,7 @@ function App() {
             ? "Wallet connected."
             : "Please switch to Sepolia."
       }));
+      await loadTokenDashboard(connection.address, connection.chainId);
     } catch (error) {
       setWallet((current) => ({
         ...current,
@@ -97,6 +144,7 @@ function App() {
       ...initialWalletState,
       message: "Wallet disconnected in this app."
     });
+    setToken(initialTokenState);
   }
 
   useEffect(() => {
@@ -107,6 +155,7 @@ function App() {
       const [nextAddress] = accounts;
       if (!nextAddress) {
         setWallet(initialWalletState);
+        setToken(initialTokenState);
         return;
       }
       refreshWallet(nextAddress);
@@ -149,7 +198,7 @@ function App() {
           {wallet.message && <p className="status-message">{wallet.message}</p>}
         </section>
 
-        <Dashboard wallet={wallet} isSepolia={isSepolia} />
+        <Dashboard wallet={wallet} token={token} isSepolia={isSepolia} />
 
         <div className="two-column">
           <SendToken isEnabled={Boolean(wallet.address) && isSepolia} />
