@@ -204,6 +204,118 @@ dd {
   text-align: right;
 }
 
+.address-copy-group {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.address-text {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+.address-hover-target {
+  cursor: default;
+}
+
+.address-hover-target:hover + .address-hover-tooltip,
+.address-hover-target:focus-visible + .address-hover-tooltip,
+.address-hover-tooltip:hover,
+.address-hover-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.address-hover-tooltip {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 8px);
+  z-index: 25;
+  width: max-content;
+  max-width: min(520px, 90vw);
+  padding: 8px 10px;
+  border: 1px solid #cbd7e5;
+  border-radius: 8px;
+  color: #18202a;
+  background: #ffffff;
+  box-shadow: 0 12px 34px rgba(22, 38, 58, 0.16);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition:
+    opacity 0.14s ease,
+    transform 0.14s ease;
+}
+
+.copy-address-button {
+  position: relative;
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  min-height: 28px;
+  border: 1px solid #cbd7e5;
+  border-radius: 8px;
+  padding: 0;
+  color: #526071;
+  background: #ffffff;
+}
+
+.copy-address-button:hover,
+.copy-address-button:focus-visible {
+  color: #2c6bed;
+  border-color: #9fbaf4;
+  background: #eef4ff;
+  outline: none;
+}
+
+.copy-address-button svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.copy-address-button:hover::after,
+.copy-address-button:focus-visible::after {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  z-index: 20;
+  width: max-content;
+  max-width: min(180px, 80vw);
+  padding: 8px 10px;
+  border: 1px solid #cbd7e5;
+  border-radius: 8px;
+  color: #18202a;
+  background: #ffffff;
+  box-shadow: 0 12px 34px rgba(22, 38, 58, 0.16);
+  content: attr(data-tooltip);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
 .form-stack,
 .faucet-body {
   display: grid;
@@ -230,6 +342,15 @@ input {
 .faucet-body p {
   margin: 0;
   color: #526071;
+}
+
+.card-note {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid #edf1f6;
+  color: #667386;
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 
 @media (max-width: 760px) {
