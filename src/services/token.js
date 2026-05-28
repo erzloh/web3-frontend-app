@@ -15,9 +15,10 @@ export function isTokenContractConfigured() {
 export function formatTokenAmount(value, decimals = ERC42_CONTRACT_DECIMALS) {
   const formatted = ethers.formatUnits(value, decimals);
   const [whole, fraction = ""] = formatted.split(".");
+  const groupedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, "'");
   const trimmedFraction = fraction.slice(0, 4).replace(/0+$/, "");
 
-  return trimmedFraction ? `${whole}.${trimmedFraction}` : whole;
+  return trimmedFraction ? `${groupedWhole}.${trimmedFraction}` : groupedWhole;
 }
 
 export async function getErc42DashboardData(address) {

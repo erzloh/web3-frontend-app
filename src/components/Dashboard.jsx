@@ -1,5 +1,5 @@
+import CopyableAddress from "./CopyableAddress.jsx";
 import { ERC42_CONTRACT_ADDRESS } from "../contracts/config.js";
-import { formatAddress } from "../services/wallet.js";
 
 function Dashboard({ wallet, token, isSepolia }) {
   const isConnected = Boolean(wallet.address);
@@ -22,7 +22,9 @@ function Dashboard({ wallet, token, isSepolia }) {
           <div>
             <dt>Contract</dt>
             <dd>
-              {formatAddress(tokenData?.contractAddress || ERC42_CONTRACT_ADDRESS)}
+              <CopyableAddress
+                address={tokenData?.contractAddress || ERC42_CONTRACT_ADDRESS}
+              />
             </dd>
           </div>
           <div>
@@ -35,7 +37,13 @@ function Dashboard({ wallet, token, isSepolia }) {
 
       <article className="info-card">
         <p className="card-label">Wallet</p>
-        <h2>{isConnected ? formatAddress(wallet.address) : "Not connected"}</h2>
+        <h2>
+          {isConnected ? (
+            <CopyableAddress address={wallet.address} />
+          ) : (
+            "Not connected"
+          )}
+        </h2>
         <dl>
           <div>
             <dt>Status</dt>
