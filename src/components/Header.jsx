@@ -27,17 +27,19 @@ function Header({
           </button>
         )}
 
-        <button
-          className="primary-button"
-          onClick={onConnectWallet}
-          disabled={!hasMetaMask || wallet.isConnecting}
-        >
-          {wallet.address
-            ? formatAddress(wallet.address)
-            : wallet.isConnecting
-              ? "Connecting..."
-              : "Connect Wallet"}
-        </button>
+        {wallet.address ? (
+          <span className="connected-wallet-badge" title={wallet.address}>
+            {formatAddress(wallet.address)}
+          </span>
+        ) : (
+          <button
+            className="primary-button"
+            onClick={onConnectWallet}
+            disabled={!hasMetaMask || wallet.isConnecting}
+          >
+            {wallet.isConnecting ? "Connecting..." : "Connect Wallet"}
+          </button>
+        )}
 
         {wallet.address && (
           <button className="secondary-button" onClick={onDisconnectWallet}>
