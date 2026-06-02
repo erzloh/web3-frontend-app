@@ -376,6 +376,131 @@ input {
   line-height: 1.5;
 }
 
+.event-history-panel {
+  margin-bottom: 18px;
+}
+
+.history-empty {
+  padding: 16px 0 2px;
+  color: #667386;
+  font-weight: 700;
+}
+
+.history-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.history-item {
+  display: grid;
+  gap: 14px;
+  padding: 18px 0 2px;
+  border-top: 1px solid #edf1f6;
+}
+
+.history-item-top {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.history-item-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.history-time {
+  color: #667386;
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.history-summary {
+  margin: 0;
+  color: #526071;
+  line-height: 1.6;
+  max-width: 78ch;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+}
+
+.history-field {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px 14px;
+  padding: 10px 12px;
+  border: 1px solid #edf1f6;
+  border-radius: 8px;
+  background: #fbfcfe;
+}
+
+.history-label {
+  color: #667386;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.history-value {
+  color: #1e2938;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+  text-align: right;
+  justify-self: end;
+  width: 100%;
+}
+
+.history-value-address {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.history-value-link {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.history-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: #244aa3;
+  background: #e8f0ff;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.history-badge.claimed {
+  color: #116139;
+  background: #dff7ea;
+}
+
+.history-badge.minted {
+  color: #8a3b00;
+  background: #fff0d9;
+}
+
+.history-badge.transfer {
+  color: #4c3d8a;
+  background: #eee9ff;
+}
+
 @media (max-width: 760px) {
   .site-header,
   .intro-panel {
@@ -394,6 +519,26 @@ input {
   .dashboard-grid,
   .two-column {
     grid-template-columns: 1fr;
+  }
+
+  .history-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .history-field {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .history-value,
+  .history-value-address,
+  .history-value-link {
+    justify-self: start;
+    text-align: left;
+  }
+
+  .history-item-top {
+    flex-direction: column;
   }
 
   .main-layout {

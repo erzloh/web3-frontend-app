@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Dashboard from "./components/Dashboard.jsx";
+import EventHistory from "./components/EventHistory.jsx";
 import Faucet from "./components/Faucet.jsx";
 import Header from "./components/Header.jsx";
 import SendToken from "./components/SendToken.jsx";
@@ -35,6 +36,7 @@ const initialTokenState = {
 function App() {
   const [wallet, setWallet] = useState(initialWalletState);
   const [token, setToken] = useState(initialTokenState);
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
   const hasMetaMask = useMemo(() => Boolean(getInstalledWallet()), []);
   const isSepolia = wallet.chainId === SEPOLIA_CHAIN_ID;
 
@@ -89,6 +91,10 @@ function App() {
     },
     [loadTokenDashboard, wallet.address]
   );
+
+  const refreshHistory = useCallback(() => {
+    setHistoryRefreshKey((current) => current + 1);
+  }, []);
 
   async function handleConnectWallet() {
     setWallet((current) => ({
@@ -200,15 +206,23 @@ function App() {
 
         <Dashboard wallet={wallet} token={token} isSepolia={isSepolia} />
 
+        <EventHistory refreshKey={historyRefreshKey} />
+
         <div className="two-column">
           <SendToken 
             isEnabled={Boolean(wallet.address) && isSepolia} 
-            onTransferSuccess={() => refreshWallet()}
+            onTransferSuccess={() => {
+              refreshWallet();
+              refreshHistory();
+            }}
           />
           <Faucet
             address={wallet.address}
             isEnabled={Boolean(wallet.address) && isSepolia}
-            onClaimSuccess={() => refreshWallet()}
+            onClaimSuccess={() => {
+              refreshWallet();
+              refreshHistory();
+            }}
           />
         </div>
       </main>

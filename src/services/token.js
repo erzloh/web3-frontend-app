@@ -4,7 +4,7 @@ import {
   ERC42_CONTRACT_ADDRESS,
   ERC42_CONTRACT_DECIMALS
 } from "../contracts/config.js";
-import { getInstalledWallet } from "./wallet.js";
+import { formatAddress, getInstalledWallet } from "./wallet.js";
 
 const EMPTY_ADDRESS = "0x0000000000000000000000000000000000000000";
 
@@ -138,4 +138,113 @@ export async function claimErc42Tokens() {
 
   const tx = await contract.claim();
   return tx;
+}
+
+async function getEventHistoryProvider() {
+  const ethereum = getInstalledWallet();
+  if (ethereum) {
+    return new ethers.BrowserProvider(ethereum);
+  }
+
+  const rpcUrl = import.meta.env.VITE_SEPOLIA_RPC_URL;
+  if (rpcUrl) {
+    return new ethers.JsonRpcProvider(rpcUrl);
+  }
+
+  throw new Error(
+    "MetaMask is not available and no Sepolia RPC URL is configured for event history."
+  );
+}
+
+function buildEventEntry({ kind, event, symbol }) {
+  const amount = event.args?.amount ?? event.args?.value;
+  const from = event.args?.from || null;
+  const to = event.args?.to || event.args?.user || null;
+  const actor = event.args?.user || event.args?.to || from;
+  const shortFrom = from ? formatAddress(from) : "-";
+  const shortTo = to ? formatAddress(to) : "-";
+  const shortActor = actor ? formatAddress(actor) : "-";
+
+  let title = kind;
+  let subtitle = "";
+
+  if (kind === "Claimed") {
+    title = "Claimed";
+    subtitle = `${shortActor} claimed ${formatTokenAmount(amount)} ${symbol}`;
+  } else if (kind === "Minted") {
+    title = "Minted";
+    subtitle = `${shortTo} received ${formatTokenAmount(amount)} ${symbol}`;
+  } else if (kind === "Transfer") {
+    title = "Transfer";
+    subtitle = `${shortFrom} sent ${formatTokenAmount(amount)} ${symbol} to ${shortTo}`;
+  }
+
+  return {
+    kind,
+    title,
+    subtitle,
+    amount: amount ? `${formatTokenAmount(amount)} ${symbol}` : "-",
+    from,
+    to,
+    actor,
+    blockNumber: event.blockNumber,
+    logIndex: event.index ?? event.logIndex ?? 0,
+    transactionHash: event.transactionHash,
+    transactionIndex: event.transactionIndex ?? 0
+  };
+}
+
+export async function getContractEventHistory() {
+  if (!isTokenContractConfigured()) {
+    throw new Error("E42 contract address is not configured yet.");
+  }
+
+  const provider = await getEventHistoryProvider();
+  const contract = new ethers.Contract(
+    ERC42_CONTRACT_ADDRESS,
+    ERC42_ABI,
+    provider
+  );
+
+  const [symbol, claimedLogs, mintedLogs, transferLogs] = await Promise.all([
+    contract.symbol(),
+    contract.queryFilter(contract.filters.Claimed(), 0, "latest"),
+    contract.queryFilter(contract.filters.Minted(), 0, "latest"),
+    contract.queryFilter(contract.filters.Transfer(), 0, "latest")
+  ]);
+
+  const blockCache = new Map();
+  async function getBlockTimestamp(blockNumber) {
+    if (blockCache.has(blockNumber)) {
+      return blockCache.get(blockNumber);
+    }
+
+    const block = await provider.getBlock(blockNumber);
+    const timestamp = block?.timestamp ?? 0;
+    blockCache.set(blockNumber, timestamp);
+    return timestamp;
+  }
+
+  const entries = await Promise.all(
+    [
+      ...claimedLogs.map((event) => buildEventEntry({ kind: "Claimed", event, symbol })),
+      ...mintedLogs.map((event) => buildEventEntry({ kind: "Minted", event, symbol })),
+      ...transferLogs.map((event) => buildEventEntry({ kind: "Transfer", event, symbol }))
+    ].map(async (entry) => ({
+      ...entry,
+      timestamp: await getBlockTimestamp(entry.blockNumber)
+    }))
+  );
+
+  entries.sort((a, b) => {
+    if (b.blockNumber !== a.blockNumber) {
+      return b.blockNumber - a.blockNumber;
+    }
+    if (b.transactionIndex !== a.transactionIndex) {
+      return b.transactionIndex - a.transactionIndex;
+    }
+    return b.logIndex - a.logIndex;
+  });
+
+  return entries;
 }

@@ -202,7 +202,7 @@ function Faucet({ address, isEnabled, onClaimSuccess }) {
         </p>
 
         <button
-          className="secondary-button"
+          className="primary-button"
           type="button"
           disabled={!isEnabled || isPending || isLoadingState || !faucetState.canClaim}
           onClick={handleClaim}
