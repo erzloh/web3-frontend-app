@@ -53,3 +53,26 @@ export async function getErc42DashboardData(address) {
     contractAddress: ERC42_CONTRACT_ADDRESS
   };
 }
+
+export async function sendErc42Tokens(recipient, amount) {
+  if (!isTokenContractConfigured()) {
+    throw new Error("ERC42 contract address is not configured yet.");
+  }
+
+  const ethereum = getInstalledWallet();
+  if (!ethereum) {
+    throw new Error("MetaMask is not installed.");
+  }
+
+  const provider = new ethers.BrowserProvider(ethereum);
+  const signer = await provider.getSigner();
+  const contract = new ethers.Contract(
+    ERC42_CONTRACT_ADDRESS,
+    ERC42_ABI,
+    signer
+  );
+
+  const parsedAmount = ethers.parseUnits(amount, ERC42_CONTRACT_DECIMALS);
+  const tx = await contract.transfer(recipient, parsedAmount);
+  return tx;
+}

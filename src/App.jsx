@@ -201,7 +201,10 @@ function App() {
         <Dashboard wallet={wallet} token={token} isSepolia={isSepolia} />
 
         <div className="two-column">
-          <SendToken isEnabled={Boolean(wallet.address) && isSepolia} />
+          <SendToken 
+            isEnabled={Boolean(wallet.address) && isSepolia} 
+            onTransferSuccess={() => refreshWallet()}
+          />
           <Faucet isEnabled={Boolean(wallet.address) && isSepolia} />
         </div>
       </main>
