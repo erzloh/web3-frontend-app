@@ -335,6 +335,15 @@ dd {
   gap: 14px;
 }
 
+.faucet-stats {
+  margin: 0;
+  gap: 10px;
+}
+
+.faucet-stats div {
+  padding-top: 10px;
+}
+
 label {
   display: grid;
   gap: 8px;
@@ -355,6 +364,7 @@ input {
 .faucet-body p {
   margin: 0;
   color: #526071;
+  line-height: 1.6;
 }
 
 .card-note {
@@ -448,4 +458,3 @@ input {
 .explorer-link:hover {
   opacity: 0.8;
 }
-
