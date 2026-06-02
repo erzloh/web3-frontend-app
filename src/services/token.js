@@ -76,3 +76,66 @@ export async function sendErc42Tokens(recipient, amount) {
   const tx = await contract.transfer(recipient, parsedAmount);
   return tx;
 }
+
+export async function getFaucetState(address) {
+  if (!isTokenContractConfigured()) {
+    throw new Error("E42 contract address is not configured yet.");
+  }
+
+  const ethereum = getInstalledWallet();
+  if (!ethereum) {
+    throw new Error("MetaMask is not installed.");
+  }
+
+  const provider = new ethers.BrowserProvider(ethereum);
+  const contract = new ethers.Contract(
+    ERC42_CONTRACT_ADDRESS,
+    ERC42_ABI,
+    provider
+  );
+
+  const [symbol, claimAmount, cooldown, lastClaimAt] = await Promise.all([
+    contract.symbol(),
+    contract.CLAIM_AMOUNT(),
+    contract.COOLDOWN(),
+    contract.lastClaimAt(address)
+  ]);
+
+  const cooldownSeconds = Number(cooldown);
+  const lastClaimAtSeconds = Number(lastClaimAt);
+  const nextClaimAt = lastClaimAtSeconds > 0 ? lastClaimAtSeconds + cooldownSeconds : 0;
+  const now = Math.floor(Date.now() / 1000);
+  const secondsUntilClaim = nextClaimAt > now ? nextClaimAt - now : 0;
+
+  return {
+    symbol,
+    claimAmount: `${formatTokenAmount(claimAmount)} ${symbol}`,
+    cooldownSeconds,
+    lastClaimAt: lastClaimAtSeconds,
+    nextClaimAt,
+    secondsUntilClaim,
+    canClaim: secondsUntilClaim === 0
+  };
+}
+
+export async function claimErc42Tokens() {
+  if (!isTokenContractConfigured()) {
+    throw new Error("E42 contract address is not configured yet.");
+  }
+
+  const ethereum = getInstalledWallet();
+  if (!ethereum) {
+    throw new Error("MetaMask is not installed.");
+  }
+
+  const provider = new ethers.BrowserProvider(ethereum);
+  const signer = await provider.getSigner();
+  const contract = new ethers.Contract(
+    ERC42_CONTRACT_ADDRESS,
+    ERC42_ABI,
+    signer
+  );
+
+  const tx = await contract.claim();
+  return tx;
+}

@@ -205,7 +205,11 @@ function App() {
             isEnabled={Boolean(wallet.address) && isSepolia} 
             onTransferSuccess={() => refreshWallet()}
           />
-          <Faucet isEnabled={Boolean(wallet.address) && isSepolia} />
+          <Faucet
+            address={wallet.address}
+            isEnabled={Boolean(wallet.address) && isSepolia}
+            onClaimSuccess={() => refreshWallet()}
+          />
         </div>
       </main>
     </div>
