@@ -7,9 +7,9 @@ function Faucet({ isEnabled }) {
       </div>
 
       <div className="faucet-body">
-        <p>100 ERC42 per claim</p>
+        <p>100 E42 per claim</p>
         <button className="secondary-button" type="button" disabled={!isEnabled}>
-          Claim ERC42
+          Claim E42
         </button>
       </div>
     </section>

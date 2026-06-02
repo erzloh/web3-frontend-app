@@ -23,7 +23,7 @@ export function formatTokenAmount(value, decimals = ERC42_CONTRACT_DECIMALS) {
 
 export async function getErc42DashboardData(address) {
   if (!isTokenContractConfigured()) {
-    throw new Error("ERC42 contract address is not configured yet.");
+    throw new Error("E42 contract address is not configured yet.");
   }
 
   const ethereum = getInstalledWallet();
@@ -56,7 +56,7 @@ export async function getErc42DashboardData(address) {
 
 export async function sendErc42Tokens(recipient, amount) {
   if (!isTokenContractConfigured()) {
-    throw new Error("ERC42 contract address is not configured yet.");
+    throw new Error("E42 contract address is not configured yet.");
   }
 
   const ethereum = getInstalledWallet();

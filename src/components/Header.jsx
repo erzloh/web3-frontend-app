@@ -11,7 +11,7 @@ function Header({
   return (
     <header className="site-header">
       <a className="brand" href="/">
-        ERC42
+        E42
       </a>
 
       <div className="wallet-actions">
