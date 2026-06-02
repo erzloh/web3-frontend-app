@@ -6,14 +6,14 @@ function Dashboard({ wallet, token, isSepolia }) {
   const tokenData = token.data;
 
   return (
-    <section className="dashboard-grid" aria-label="ERC42 dashboard">
+    <section className="dashboard-grid" aria-label="E42 dashboard">
       <article className="info-card">
         <p className="card-label">Token</p>
         <h2>{tokenData?.name || "Eric42"}</h2>
         <dl>
           <div>
             <dt>Symbol</dt>
-            <dd>{tokenData?.symbol || "ERC42"}</dd>
+            <dd>{tokenData?.symbol || "E42"}</dd>
           </div>
           <div>
             <dt>Total Supply</dt>
@@ -58,7 +58,7 @@ function Dashboard({ wallet, token, isSepolia }) {
             <dd>{wallet.ethBalance || "-"}</dd>
           </div>
           <div>
-            <dt>ERC42 Balance</dt>
+            <dt>E42 Balance</dt>
             <dd>
               {token.isLoading
                 ? "Loading..."

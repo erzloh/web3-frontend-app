@@ -76,7 +76,7 @@ function SendToken({ isEnabled, onTransferSuccess }) {
     <section className="tool-panel">
       <div className="panel-heading">
         <p className="card-label">Transfer</p>
-        <h2>Send ERC42</h2>
+        <h2>Send E42</h2>
       </div>
 
       <form className="form-stack" onSubmit={handleSubmit}>

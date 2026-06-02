@@ -29,7 +29,7 @@ const initialTokenState = {
   isLoading: false,
   message: isTokenContractConfigured()
     ? ""
-    : "ERC42 contract address is not configured yet."
+    : "E42 contract address is not configured yet."
 };
 
 function App() {
@@ -189,9 +189,9 @@ function App() {
         <section className="intro-panel">
           <div>
             <p className="eyebrow">Sepolia learning dApp</p>
-            <h1>ERC42 Wallet</h1>
+            <h1>E42 Wallet</h1>
             <p>
-              Connect MetaMask, inspect ERC42 token data, and build toward
+              Connect MetaMask, inspect E42 token data, and build toward
               transfers and faucet claims one step at a time.
             </p>
           </div>
