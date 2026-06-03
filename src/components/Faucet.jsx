@@ -197,10 +197,6 @@ function Faucet({ address, isEnabled, onClaimSuccess }) {
           </div>
         </dl>
 
-        <p>
-          Claiming sends test E42 directly from the faucet contract on Sepolia.
-        </p>
-
         <button
           className="primary-button"
           type="button"

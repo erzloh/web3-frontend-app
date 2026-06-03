@@ -4,6 +4,7 @@ import EventHistory from "./components/EventHistory.jsx";
 import Faucet from "./components/Faucet.jsx";
 import Header from "./components/Header.jsx";
 import SendToken from "./components/SendToken.jsx";
+import SurprisePurchase from "./components/SurprisePurchase.jsx";
 import { SEPOLIA_CHAIN_ID } from "./contracts/config.js";
 import {
   connectWallet,
@@ -194,11 +195,10 @@ function App() {
       <main className="main-layout">
         <section className="intro-panel">
           <div>
-            <p className="eyebrow">Sepolia learning dApp</p>
-            <h1>E42 Wallet</h1>
+            <p className="eyebrow">Sepolia dApp</p>
+            <h1>E42 dashboard</h1>
             <p>
-              Connect MetaMask, inspect E42 token data, and build toward
-              transfers and faucet claims one step at a time.
+              Manage transfers, faucet claims, and on-chain activity for E42 on Sepolia.
             </p>
           </div>
           {wallet.message && <p className="status-message">{wallet.message}</p>}
@@ -206,11 +206,18 @@ function App() {
 
         <Dashboard wallet={wallet} token={token} isSepolia={isSepolia} />
 
-        <EventHistory refreshKey={historyRefreshKey} />
+        <SurprisePurchase
+          address={wallet.address}
+          isEnabled={Boolean(wallet.address) && isSepolia}
+          onPurchaseSuccess={() => {
+            refreshWallet();
+            refreshHistory();
+          }}
+        />
 
         <div className="two-column">
-          <SendToken 
-            isEnabled={Boolean(wallet.address) && isSepolia} 
+          <SendToken
+            isEnabled={Boolean(wallet.address) && isSepolia}
             onTransferSuccess={() => {
               refreshWallet();
               refreshHistory();
@@ -225,6 +232,8 @@ function App() {
             }}
           />
         </div>
+
+        <EventHistory refreshKey={historyRefreshKey} />
       </main>
     </div>
   );
