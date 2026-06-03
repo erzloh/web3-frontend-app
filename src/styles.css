@@ -376,7 +376,74 @@ input {
   line-height: 1.5;
 }
 
+.surprise-panel {
+  margin-bottom: 18px;
+}
+
+.surprise-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.surprise-detail {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid #edf1f6;
+  border-radius: 8px;
+  background: #fbfcfe;
+}
+
+.surprise-value {
+  color: #1e2938;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.surprise-instructions {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #edf1f6;
+  color: #526071;
+  line-height: 1.6;
+}
+
+.surprise-instructions p {
+  margin: 0;
+}
+
+.surprise-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.surprise-actions > * {
+  flex: 0 0 auto;
+}
+
+.surprise-result {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #edf1f6;
+}
+
+.surprise-result img {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 8px;
+  border: 1px solid #dce4ee;
+}
+
 .event-history-panel {
+  margin-top: 18px;
   margin-bottom: 18px;
 }
 
@@ -521,6 +588,10 @@ input {
 
   .dashboard-grid,
   .two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .surprise-details {
     grid-template-columns: 1fr;
   }
 
