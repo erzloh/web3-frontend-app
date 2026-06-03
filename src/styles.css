@@ -461,6 +461,16 @@ input {
   list-style: none;
 }
 
+.history-toggle-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.history-toggle-button {
+  min-width: 180px;
+}
+
 .history-item {
   display: grid;
   gap: 14px;
