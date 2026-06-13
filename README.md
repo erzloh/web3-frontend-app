@@ -1,12 +1,8 @@
-
-
-E42 dashboard
-
-![E42 frontend demo](screenshots/E42%20frontend%20demo.gif)
-
 Overview
 ---
 E42 dashboard is a lightweight React web3 app for interacting with an Ethereum token (called E42) I made. It includes components for sending tokens, a faucet to claim free tokens, a surprise-purchase flow, and an event history viewer.
+
+![E42 frontend demo](screenshots/E42%20frontend%20demo.gif)
 
 Features
 ---
